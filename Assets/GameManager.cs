@@ -17,6 +17,12 @@ public class GameManager : MonoBehaviour
     private Rigidbody2D ballRigidbody;
     private CircleCollider2D ballCollider;
 
+    // PowerUp
+    public PowerUpControl powerUp;
+
+    // Fireball
+    public FireballControl fireball;
+
     // Skor maksimal
     public int maxScore;
 
@@ -53,14 +59,18 @@ public class GameManager : MonoBehaviour
         {
             // Ketika tombol restart ditekan, reset skor kedua pemain...
             player1.ResetScore();
+            player1.ResetSize();
             player2.ResetScore();
+            player2.ResetSize();
 
             // ...dan restart game.
             ball.SendMessage("RestartGame", 0.5f, SendMessageOptions.RequireReceiver);
+            powerUp.RestartGame();
+            fireball.RestartGame();
         }
 
         // Jika pemain 1 menang (mencapai skor maksimal), ...
-        if (player1.Score == maxScore)
+        if ((player1.Score == maxScore) || (player2.Score == -1))
         {
             // ...tampilkan teks "PLAYER ONE WINS" di bagian kiri layar...
             GUI.Label(new Rect(Screen.width / 2 - 150, Screen.height / 2 - 10, 2000, 1000), "PLAYER ONE WINS");
@@ -69,7 +79,7 @@ public class GameManager : MonoBehaviour
             ball.SendMessage("ResetBall", null, SendMessageOptions.RequireReceiver);
         }
         // Sebaliknya, jika pemain 2 menang (mencapai skor maksimal), ...
-        else if (player2.Score == maxScore)
+        else if ((player2.Score == maxScore) || (player1.Score == -1))
         {
             // ...tampilkan teks "PLAYER TWO WINS" di bagian kanan layar... 
             GUI.Label(new Rect(Screen.width / 2 + 30, Screen.height / 2 - 10, 2000, 1000), "PLAYER TWO WINS");

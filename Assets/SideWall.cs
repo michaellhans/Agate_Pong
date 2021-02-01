@@ -6,6 +6,8 @@ public class SideWall : MonoBehaviour
 {
     // Pemain yang akan bertambah skornya jika bola menyentuh dinding ini.
     public PlayerControl player;
+    public PowerUpControl powerUp;
+    public FireballControl fireball;
 
     // Skrip GameManager untuk mengakses skor maksimal
     [SerializeField]
@@ -31,13 +33,28 @@ public class SideWall : MonoBehaviour
         {
             // Tambahkan skor ke pemain
             player.IncrementScore();
+            player.ResetSize();
 
             // Jika skor pemain belum mencapai skor maksimal...
             if (player.Score < gameManager.maxScore)
             {
                 // ...restart game setelah bola mengenai dinding.
                 anotherCollider.gameObject.SendMessage("RestartGame", 2.0f, SendMessageOptions.RequireReceiver);
+                powerUp.RestartGame();
+                fireball.RestartGame();
             }
+        }
+
+        if (anotherCollider.name == "PowerUp")
+        {
+            // Non aktifkan powerup pada ronde tersebut
+            anotherCollider.gameObject.SendMessage("HideButton", SendMessageOptions.RequireReceiver);
+        }
+
+        if (anotherCollider.name == "Fireball")
+        {
+            // Non aktifkan powerup pada ronde tersebut
+            anotherCollider.gameObject.SendMessage("HideButton", SendMessageOptions.RequireReceiver);
         }
     }
 }

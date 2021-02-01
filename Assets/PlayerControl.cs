@@ -94,6 +94,12 @@ public class PlayerControl : MonoBehaviour
         get { return score; }
     }
 
+    // Mengembalikan ke ukuran semula
+    public void ResetSize()
+    {
+        transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+    }
+
     // Untuk mengakses informasi titik kontak dari kelas lain
     public ContactPoint2D LastContactPoint
     {
@@ -106,6 +112,18 @@ public class PlayerControl : MonoBehaviour
         if (collision.gameObject.name.Equals("Ball"))
         {
             lastContactPoint = collision.GetContact(0);
+        }
+
+        if (collision.gameObject.name.Equals("PowerUp"))
+        {
+            transform.localScale = new Vector3(1.0f, 2.0f, 1.0f);
+            collision.gameObject.SendMessage("HideButton", SendMessageOptions.RequireReceiver);
+        }
+
+        if (collision.gameObject.name.Equals("Fireball"))
+        {
+            collision.gameObject.SendMessage("HideButton", SendMessageOptions.RequireReceiver);
+            score = -1;
         }
     }
 }

@@ -2,28 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BallControl : MonoBehaviour
+public class PowerUpControl : MonoBehaviour
 {
-    // Rigidbody 2D bola
+    // Rigidbody 2D Power Up
     private Rigidbody2D rigidBody2D;
 
-    // Besarnya gaya awal yang diberikan untuk mendorong bola
+    // Besarnya gaya awal yang diberikan untuk mendorong power up
     public float constForce;
     public float xInitialForce;
     public float yInitialForce;
-
-    // Titik asal lintasan bola saat ini
-    private Vector2 trajectoryOrigin;
 
     // Start is called before the first frame update
     void Start()
     {
         rigidBody2D = GetComponent<Rigidbody2D>();
-        trajectoryOrigin = transform.position;
+        this.gameObject.SetActive(false);
 
         // Mulai game
         RestartGame();
     }
+
 
     // Update is called once per frame
     void Update()
@@ -31,28 +29,26 @@ public class BallControl : MonoBehaviour
         
     }
 
-    void ResetBall()
+    void HideButton()
     {
-        // Reset posisi menjadi (0,0)
-        transform.position = Vector2.zero;
-
-        // Reset kecepatan menjadi (0,0)
-        rigidBody2D.velocity = Vector2.zero;
+        this.gameObject.SetActive(false);
     }
 
-    void PushBall()
+    void PushPowerUp()
     {
+        this.gameObject.SetActive(true);
+
         // Tentukan nilai komponen y dari gaya dorong antara -yInitialForce dan yInitialForce
         float yRandomInitialForce = Random.Range(-yInitialForce, yInitialForce);
 
         // Tentukan nilai acak antara 0 (inklusif) dan 2 (eksklusif)
         float randomDirection = Random.Range(0, 2);
 
-        // Jika nilainya di bawah 1, bola bergerak ke kiri. 
-        // Jika tidak, bola bergerak ke kanan.
+        // Jika nilainya di bawah 1, power up bergerak ke kiri. 
+        // Jika tidak, power up bergerak ke kanan.
         if (randomDirection < 1.0f)
         {
-            // Gunakan gaya untuk menggerakkan bola ini.
+            // Gunakan gaya untuk menggerakkan power up ini.
             rigidBody2D.AddForce(new Vector2(-xInitialForce, yRandomInitialForce).normalized * constForce);
         }
         else
@@ -61,24 +57,21 @@ public class BallControl : MonoBehaviour
         }
     }
 
-    void RestartGame()
+    void ResetPowerUp()
+    {
+        // Reset posisi menjadi (0,0)
+        transform.position = Vector2.zero;
+
+        // Reset kecepatan menjadi (0,0)
+        rigidBody2D.velocity = Vector2.zero;
+    }
+
+    public void RestartGame()
     {
         // Kembalikan bola ke posisi semula
-        ResetBall();
-
-        // Setelah 2 detik, berikan gaya ke bola
-        Invoke("PushBall", 2);
-    }
-
-    // Ketika bola beranjak dari sebuah tumbukan, rekam titik tumbukan tersebut
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        trajectoryOrigin = transform.position;
-    }
-
-    // Untuk mengakses informasi titik asal lintasan
-    public Vector2 TrajectoryOrigin
-    {
-        get { return trajectoryOrigin; }
+        ResetPowerUp();
+        
+        // Setelah 10 detik, berikan gaya ke powerup
+        Invoke("PushPowerUp", 13);
     }
 }
