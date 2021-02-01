@@ -1,7 +1,10 @@
-# Agate Tugas 1 - Simple Pong Game
+# Agate Task 1 - Simple Pong Game
 
-Michael Hans
-13518056
+Monday, 1st February 2021
+
+## Author
+* Michael Hans
+* 13518056
 
 ## How to Play
 1. Go to Build folder in this repository
